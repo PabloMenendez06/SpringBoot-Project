@@ -16,29 +16,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pabomenendez.webapp.biblioteca.model.Cliente;
-import com.pabomenendez.webapp.biblioteca.service.ClienteService;
-
+import com.pabomenendez.webapp.biblioteca.model.Empleado;
+import com.pabomenendez.webapp.biblioteca.service.EmpleadoService;
 
 @Controller
 @RestController
 @RequestMapping("")
-
-public class ClienteController {
+public class EmpleadoController {
 
     @Autowired
-    ClienteService clienteService;
+    EmpleadoService empleadoService;
 
-    @GetMapping("/clientes")
-    public List<Cliente> listarClientes(){
-        return clienteService.listarClientes();
+    @GetMapping("/empleados")
+    public List<Empleado> listarEmpleados(){
+        return empleadoService.listarEmpleados();
     }
-    @PostMapping("/cliente")
-    public ResponseEntity<Map<String, String>> agregarCliente(@RequestBody Cliente cliente){
+
+    @PostMapping("/Empleado")
+    public ResponseEntity<Map<String,String>> agregarEmpleado(@RequestBody Empleado empleado){
         Map<String,String> response = new HashMap<>();
         try {
-            clienteService.guardarCliente(cliente);
-            response.put("Mesagge", "Cliente creado con exito");
+            empleadoService.guardarEmpleado(empleado);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("err", "Hubo un erro al crear el Cliente");
@@ -46,41 +44,43 @@ public class ClienteController {
         }
     }
 
-    @GetMapping("/cliente")
-    public ResponseEntity<Cliente> buscarClienteporDpi(@RequestParam Long dpi){
+    @GetMapping("/empleado")
+    public ResponseEntity<Empleado> buscarEmpleadoporId(@RequestParam Long id){
         try {
-            Cliente cliente = clienteService.buscarClientePorDpi(dpi);
-            return ResponseEntity.ok(cliente);
+            Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
+            return ResponseEntity.ok(empleado);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);
         }
     }
-    
-    @PutMapping("/cliente")
-    public ResponseEntity<Map<String, String>> editarCliente(@RequestParam Long dpi, @RequestBody Cliente clienteNuevo){
+
+    @PutMapping("/Empleado")
+    public ResponseEntity<Map<String, String>> editarEmpleado(@RequestParam Long id, @RequestBody Empleado empleadoNuevo){
         Map<String, String> response = new HashMap<>();
         try {
-            Cliente cliente = clienteService.buscarClientePorDpi(dpi);
-            cliente.setNombre(clienteNuevo.getNombre());
-            cliente.setApellido(clienteNuevo.getApellido());
-            cliente.setTelefono(clienteNuevo.getTelefono());
-            clienteService.guardarCliente(cliente);
-            response.put("message", "El cliente se ha modificado con éxito");
+            Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
+            empleado.setNombre(empleadoNuevo.getNombre());
+            empleado.setApellido(empleadoNuevo.getApellido());
+            empleado.setDireccion(empleadoNuevo.getDireccion());
+            empleado.setTelefono(empleadoNuevo.getTelefono());
+            empleado.setDpi(empleadoNuevo.getDpi());
+            empleadoService.guardarEmpleado(empleado);
+            response.put("message", "El Empleado se ha modificado con éxito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("message", "Error");
-            response.put("err", "Hubo un error al intentar modificar el cliente");
+            response.put("err", "Hubo un error al intentar modificar el empleado");
             return ResponseEntity.badRequest().body(response);
         }
     }
 
-    @DeleteMapping("/cliente")
-    public ResponseEntity<Map<String,String>> eliminarCliente(@RequestParam long dpi){
+    @DeleteMapping("/empleado")
+    public ResponseEntity<Map<String,String>> eliminarEmpleado(@RequestParam long id){
         Map<String,String> response = new HashMap<>();
         try {
-            Cliente cliente = clienteService.buscarClientePorDpi(dpi);
-            clienteService.eliminarCliente(cliente);
-            response.put("Message", "El cliente ha sido eliminado con exito");
+            Empleado empleado = empleadoService.buscarEmpleadoPorId(id);
+            empleadoService.eliminarEmpleado(empleado);
+            response.put("Message", "El empleado ha sido eliminado con exito");
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             response.put("Message", "Error");
@@ -88,5 +88,4 @@ public class ClienteController {
             return ResponseEntity.badRequest().body(response);
         }
     }
-
 }

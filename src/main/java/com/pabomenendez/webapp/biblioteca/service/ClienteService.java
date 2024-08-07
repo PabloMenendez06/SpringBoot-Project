@@ -28,7 +28,7 @@ public class ClienteService implements IClienteService{
     }
     @Override
     public void eliminarCliente(Cliente cliente){
-
+        clienteRepository.delete(cliente);
     }
 
 }

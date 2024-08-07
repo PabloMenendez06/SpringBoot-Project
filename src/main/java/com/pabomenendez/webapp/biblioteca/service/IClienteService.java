@@ -7,7 +7,7 @@ import com.pabomenendez.webapp.biblioteca.model.Cliente;
 
 public interface IClienteService {
 
-     public List<Cliente> listarClientes();
+    public List<Cliente> listarClientes();
 
     public void guardarCliente(Cliente cliente);
 
