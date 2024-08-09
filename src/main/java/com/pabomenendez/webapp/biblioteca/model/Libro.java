@@ -19,7 +19,6 @@ public class Libro {
     private long id;
     private String isbn;
     private String nombre;
-    private String resumen;
     @Column(columnDefinition = "TEXT")
     private String sinopsis;
     private String autor;
