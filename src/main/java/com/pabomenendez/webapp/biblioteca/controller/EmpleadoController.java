@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -36,8 +37,15 @@ public class EmpleadoController {
     public ResponseEntity<Map<String,String>> agregarEmpleado(@RequestBody Empleado empleado){
         Map<String,String> response = new HashMap<>();
         try {
+            if (!empleadoService.verificarDpiDuplicado(empleado)) {
             empleadoService.guardarEmpleado(empleado);
+            response.put("Message", "Empleado creado con exito");
             return ResponseEntity.ok(response);
+            }else{
+                response.put("Message", "Error");
+                response.put("Err", "El dpi se encuentre duplicado");
+                return ResponseEntity.badRequest().body(response);
+            }
         } catch (Exception e) {
             response.put("err", "Hubo un erro al crear el Cliente");
             return ResponseEntity.badRequest().body(response);
@@ -64,9 +72,15 @@ public class EmpleadoController {
             empleado.setDireccion(empleadoNuevo.getDireccion());
             empleado.setTelefono(empleadoNuevo.getTelefono());
             empleado.setDpi(empleadoNuevo.getDpi());
-            empleadoService.guardarEmpleado(empleado);
-            response.put("message", "El Empleado se ha modificado con éxito");
-            return ResponseEntity.ok(response);
+            if (!empleadoService.verificarDpiDuplicado(empleadoNuevo)) {
+                empleadoService.guardarEmpleado(empleado);
+                response.put("message", "El Empleado se ha modificado con éxito");
+                return ResponseEntity.ok(response);
+            }else{
+                response.put("Message", "Error");
+                response.put("Err", "El dpi se encuentre duplicado");
+                return ResponseEntity.badRequest().body(null);
+            }
         } catch (Exception e) {
             response.put("message", "Error");
             response.put("err", "Hubo un error al intentar modificar el empleado");
