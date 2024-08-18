@@ -26,12 +26,24 @@ public class PrestamoService implements IPrestamoService{
 
     @Override
     public Prestamo guardarPrestamo(Prestamo prestamo) {
-       return prestamoRepository.save(prestamo);
+    return prestamoRepository.save(prestamo);
     }
 
     @Override
     public void eliminarPrestamo(Prestamo prestamo) {
         prestamoRepository.delete(prestamo);
+    }
+
+    @Override
+    public boolean tienePrestamoVigente(Long dpi) {
+        List<Prestamo> prestamos = prestamoRepository.findAll();
+
+        for (Prestamo prestamo : prestamos) {
+            if (prestamo.getCliente() != null && prestamo.getCliente().getDpi().equals(dpi) &&  prestamo.getVigencia()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

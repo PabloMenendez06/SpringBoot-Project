@@ -6,7 +6,7 @@ import com.pabomenendez.webapp.biblioteca.model.Empleado;
 
 public interface IEmpleadoService {
 
-     public List<Empleado> listarEmpleados();
+    public List<Empleado> listarEmpleados();
 
     public void guardarEmpleado(Empleado empleado);
 

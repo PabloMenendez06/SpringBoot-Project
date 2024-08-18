@@ -12,7 +12,7 @@ import lombok.Data;
 public class Cliente {
 
     @Id
-    private long dpi;
+    private Long dpi;
     private String nombre;
     private String apellido;
     private String telefono;
